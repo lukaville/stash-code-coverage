@@ -1,0 +1,5 @@
+package bitbucket
+
+class BitbucketServerExtension {
+
+}
