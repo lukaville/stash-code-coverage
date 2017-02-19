@@ -1,6 +1,7 @@
 package external.bitbucket
 
 import config.Bitbucket
+import coverage.FileCoverage
 import external.bitbucket.model.PullRequest
 import external.bitbucket.model.PullRequestResponse
 import org.w3c.dom.MutationObserver
@@ -39,6 +40,16 @@ class PullRequestPage {
                 subtree = true
         )
         observer.observe(target as Node, observerOptions)
+    }
+
+    fun addFileToolbarButton(title: String, url: String) {
+        val toolbar = document.querySelector(".file-toolbar > .secondary") ?: return
+        val buttonString = """<div class="aui-buttons"><a href="$url" target="_blank" class="aui-button" autocomplete="off">$title</a></div>"""
+        toolbar.insertAdjacentHTML("afterbegin", buttonString)
+    }
+
+    fun showCoverage(fileCoverage: FileCoverage) {
+        // TODO
     }
 
     private fun getFileName(): String? {
@@ -89,7 +100,7 @@ class PullRequestPage {
         fun match(bitbucket: Bitbucket): Boolean {
             val location = document.location ?: return false
             if (location.host == bitbucket.host) {
-                val pullRequestUrl = location.pathname.match("/projects/(.*)/repos/(.*)/pull-requests/.*")
+                val pullRequestUrl = location.pathname.match("/projects/(.*)/repos/(.*)/pull-requests/.*") ?: return false
                 if (pullRequestUrl.size == 3) {
                     val project = pullRequestUrl[1]
                     val repository = pullRequestUrl[2]

@@ -27,15 +27,17 @@ class CodeCoverageExtension(private val project: Project) {
 
     private fun onFileLoaded(file: String, path: String) {
         if (isFileMatches(file)) {
-            loadCoverageReport(file, path)
+            val javaPackage = getJavaPackage(path)
+            val coverageUrl = build.getJacocoCoverageUrl(javaPackage, file)
+            loadCoverageReport(coverageUrl)
         }
     }
 
-    private fun loadCoverageReport(file: String, path: String) {
-        val javaPackage = getJavaPackage(path)
-        val coverageUrl = build.getJacocoCoverageUrl(javaPackage, file)
+    private fun loadCoverageReport(coverageUrl: String) {
         requests.get(coverageUrl, {
             val coverage = JacocoParser.parseHtmlReport(it)
+            page.addFileToolbarButton("Coverage", coverageUrl)
+            page.showCoverage(coverage)
             console.log(coverage)
         })
     }
