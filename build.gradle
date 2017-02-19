@@ -1,0 +1,33 @@
+buildscript {
+    ext.kotlin_version = '1.0.6'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+task copyModuleArtifacts {
+    subprojects.each { module ->
+        copy {
+            from module.buildDir
+            into "${buildDir}/extension/"
+            include '*.js'
+            include 'lib/*.js'
+        }
+    }
+}
+
+task copyResources(type: Copy) {
+    from 'resources'
+    into "${buildDir}/extension/"
+}
+
+task build {
+    doLast {
+        copyModuleArtifacts.execute()
+        copyResources.execute()
+    }
+}

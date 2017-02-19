@@ -1,0 +1,21 @@
+apply plugin: "kotlin2js"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-js-library:$kotlin_version"
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+}
+
+compileKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.sourceMap = true
+    kotlinOptions.outputFile = "${buildDir}/settings.js"
+    kotlinOptions.suppressWarnings = true
+    kotlinOptions.verbose = true
+}

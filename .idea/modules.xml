@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/inject/inject.iml" filepath="$PROJECT_DIR$/.idea/modules/inject/inject.iml" group="inject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/settings/settings.iml" filepath="$PROJECT_DIR$/.idea/modules/settings/settings.iml" group="settings" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stash-code-coverage.iml" filepath="$PROJECT_DIR$/.idea/modules/stash-code-coverage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stash-code-coverage_main.iml" filepath="$PROJECT_DIR$/.idea/modules/stash-code-coverage_main.iml" group="stash-code-coverage" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stash-code-coverage_test.iml" filepath="$PROJECT_DIR$/.idea/modules/stash-code-coverage_test.iml" group="stash-code-coverage" />
+    </modules>
+  </component>
+</project>

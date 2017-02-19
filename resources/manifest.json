@@ -1,0 +1,25 @@
+{
+  "name": "Stash Code Coverage",
+  "description": "Displays code coverage button on pull requests in Bitbucket Server",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "lib/kotlin.js",
+        "inject.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "settings.html",
+  "permissions": [
+    "webRequest",
+    "identity",
+    "storage",
+    "*://*/*"
+  ],
+  "manifest_version": 2
+}
