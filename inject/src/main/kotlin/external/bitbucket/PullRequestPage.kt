@@ -96,7 +96,7 @@ class PullRequestPage {
             .removeSuffix(");")
 
     private fun isFileLoaded(): Boolean {
-        return document.querySelector(".diff-editor") != null
+        return document.querySelector(".diff-editor") != null && document.querySelector(".file-tree-container") != null
     }
 
     @native("response")

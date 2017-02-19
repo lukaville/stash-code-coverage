@@ -1,6 +1,5 @@
 import config.Project
 import coverage.FileCoverage
-import coverage.LineCoverage
 import coverage.LineCoverage.Coverage.*
 import external.bitbucket.BitbucketServerApi
 import external.bitbucket.PullRequestPage
