@@ -19,5 +19,11 @@
     "storage",
     "*://*/*"
   ],
+  "icons": {
+    "256": "icons/icon256.png",
+    "128": "icons/icon128.png",
+    "64": "icons/icon64.png",
+    "48": "icons/icon48.png"
+  },
   "manifest_version": 2
 }

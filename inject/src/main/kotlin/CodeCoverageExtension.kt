@@ -20,7 +20,10 @@ class CodeCoverageExtension(private val project: Project) {
 
         BitbucketServerApi.getBuilds(page.pullRequest) {
             val url = findBuildUrl(it.results) ?: return@getBuilds
-            build = TeamCityBuild.fromUrl(url) ?: return@getBuilds
+            val build = TeamCityBuild.fromUrl(url) ?: return@getBuilds
+            if (build.buildTypeId == project.teamCity.buildTypeId) {
+                this.build = build
+            }
         }
 
         page.addFileViewListener { file, path ->
