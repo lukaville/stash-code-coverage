@@ -2,13 +2,24 @@
 <head>
     <title>Settings — Stash Code Coverage</title>
     <style>
+        body {
+            padding: 24px;
+            background: #F5F5F5;
+            color: #37474F;
+        }
 
+        .config-input {
+            width: 720px;
+            height: 600px;
+            font-family: monospace;
+            font-size: 16px;
+       }
     </style>
 </head>
 <body>
-<div>
+<div class="page">
     <h1>Configuration</h1>
-    <textarea title="Configuration" id="config"></textarea>
+    <textarea title="Configuration" class="config-input" id="config"></textarea>
 </div>
 <script src="lib/kotlin.js"></script>
 <script src="settings.js"></script>

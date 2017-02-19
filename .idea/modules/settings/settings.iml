@@ -21,7 +21,7 @@
                 <option name="metaInfo" value="false" />
                 <option name="kjsm" value="false" />
                 <option name="target" />
-                <option name="moduleKind" />
+                <option name="moduleKind" value="plain" />
                 <option name="main" />
                 <option name="outputPrefix" />
                 <option name="outputPostfix" />
@@ -71,7 +71,7 @@
           <KotlinVersionInfo>
             <option name="apiLevel" value="1.0" />
             <option name="languageLevel" value="1.0" />
-            <option name="targetPlatformName" value="JVM 1.6" />
+            <option name="targetPlatformName" value="JavaScript " />
           </KotlinVersionInfo>
         </option>
       </configuration>
@@ -80,10 +80,12 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../settings">
+      <sourceFolder url="file://$MODULE_DIR$/../../../settings/src/main/kotlin" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/../../../settings/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../settings/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="KotlinJavaScript" level="project" />
   </component>
 </module>

@@ -1,12 +1,15 @@
+import org.w3c.dom.HTMLTextAreaElement
+import types.chrome
+import types.getValue
+import types.setValue
 import kotlin.browser.document
 
 fun main(args: Array<String>) {
-    val el = document.createElement("div")
-    el.appendChild(document.createTextNode("Hello!"))
-    document.body!!.appendChild(el)
-
-    val counterDiv = document.createElement("div")
-    val counterText = document.createTextNode("Counter!")
-    counterDiv.appendChild(counterText)
-    document.body!!.appendChild(counterDiv)
+    val textArea = document.querySelector("#config") as? HTMLTextAreaElement ?: return
+    chrome.storage.sync.getValue<String>("config") {
+        textArea.value = it ?: ""
+    }
+    textArea.addEventListener("input", {
+        chrome.storage.sync.setValue("config", textArea.value)
+    })
 }

@@ -21,7 +21,7 @@
                 <option name="metaInfo" value="false" />
                 <option name="kjsm" value="false" />
                 <option name="target" />
-                <option name="moduleKind" />
+                <option name="moduleKind" value="plain" />
                 <option name="main" />
                 <option name="outputPrefix" />
                 <option name="outputPostfix" />
@@ -80,10 +80,12 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../inject">
+      <sourceFolder url="file://$MODULE_DIR$/../../../inject/src/main/kotlin" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/../../../inject/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../inject/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="KotlinJavaScript" level="project" />
   </component>
 </module>

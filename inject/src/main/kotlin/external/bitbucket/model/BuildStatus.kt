@@ -1,4 +1,4 @@
-package bitbucket.model
+package external.bitbucket.model
 
 class BuildStatus(
         val failed: Int,

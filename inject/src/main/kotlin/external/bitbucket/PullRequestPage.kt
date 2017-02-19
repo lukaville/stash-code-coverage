@@ -1,45 +1,36 @@
-package bitbucket
+package external.bitbucket
 
-import bitbucket.model.BuildStatus
-import bitbucket.model.PullRequest
-import bitbucket.model.PullRequestResponse
+import config.Bitbucket
+import external.bitbucket.model.PullRequest
+import external.bitbucket.model.PullRequestResponse
 import org.w3c.dom.MutationObserver
 import org.w3c.dom.Node
 import types.MutationObserverOptions
-import util.requests
 import kotlin.browser.document
-import kotlin.browser.window
 import kotlin.dom.asList
 
-object stash {
+class PullRequestPage {
 
     private var lastFile: String? = null
 
-    object api {
+    val pullRequest: PullRequest
+        get() = getPageResponse()?.pullRequestJSON ?: throw IllegalStateException("Pull request JSON not found")
 
-        private val baseUrl = "${window.location.origin}/rest"
-
-        fun getBuilds(pullRequest: PullRequest): BuildStatus {
-            val url = "$baseUrl/build-status/latest/commits/stats/${pullRequest.fromRef.latestCommit}?includeUnique=true"
-            return requests.get<BuildStatus>(url)
-        }
-
-    }
-
-    fun getPullRequest(): PullRequest? {
-        return getPageResponse()?.pullRequestJSON
-    }
-
-    fun onNewFileLoaded(callback: (path: String, file: String) -> Unit) {
+    fun addFileViewListener(callback: (file: String, path: String) -> Unit) {
         val contentSelector = getPageResponse()?.contentSelector ?: return console.error("Content selector not found")
         val target = document.querySelector(contentSelector)
         val observer = MutationObserver { mutations, observer ->
+            if (!isFileLoaded()) {
+                return@MutationObserver
+            }
+
             val file = getFileName() ?: return@MutationObserver
             val path = getFilePath() ?: return@MutationObserver
+
             val fullPath = path + file
             if (lastFile != fullPath) {
                 lastFile = fullPath
-                callback(path, file)
+                callback(file, path)
             }
         }
 
@@ -79,8 +70,12 @@ object stash {
             .removePrefix("require('bitbucket/internal/layout/pull-request').onReady(")
             .removeSuffix(");")
 
-    @native
-    val response: PullRequestResponse
+    private fun isFileLoaded(): Boolean {
+        return document.querySelector(".diff-editor") != null
+    }
+
+    @native("response")
+    private var response: PullRequestResponse
 
     private fun getPageResponse(): PullRequestResponse? {
         val script = getPullRequestScript() ?: return null
@@ -89,4 +84,20 @@ object stash {
         return response
     }
 
+    companion object {
+
+        fun match(bitbucket: Bitbucket): Boolean {
+            val location = document.location ?: return false
+            if (location.host == bitbucket.host) {
+                val pullRequestUrl = location.pathname.match("/projects/(.*)/repos/(.*)/pull-requests/.*")
+                if (pullRequestUrl.size == 3) {
+                    val project = pullRequestUrl[1]
+                    val repository = pullRequestUrl[2]
+                    return project == bitbucket.project && repository == bitbucket.repository
+                }
+            }
+            return false
+        }
+
+    }
 }
