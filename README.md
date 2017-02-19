@@ -1,5 +1,7 @@
 # Bitbucket Server Code Coverage
-Chrome extension that displays code coverage on pull requests in Bitbucket Server
+Chrome extension that displays code coverage button on pull requests in Bitbucket Server
+
+![Screenshot](http://i.imgur.com/V4N1hUJ.png)
 
 ## Build
 
