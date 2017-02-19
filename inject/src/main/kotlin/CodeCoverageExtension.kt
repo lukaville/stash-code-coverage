@@ -1,6 +1,10 @@
 import config.Project
+import coverage.FileCoverage
+import coverage.LineCoverage
+import coverage.LineCoverage.Coverage.*
 import external.bitbucket.BitbucketServerApi
 import external.bitbucket.PullRequestPage
+import external.bitbucket.model.BuildResult
 import external.jacoco.JacocoParser
 import external.teamcity.TeamCityBuild
 import util.Url
@@ -10,13 +14,13 @@ class CodeCoverageExtension(private val project: Project) {
 
     private lateinit var page: PullRequestPage
 
-    private lateinit var build: TeamCityBuild
+    private var build: TeamCityBuild? = null
 
     fun onPageLoaded(page: PullRequestPage) {
         this.page = page
 
         BitbucketServerApi.getBuilds(page.pullRequest) {
-            val url = Url(it.results.first().url)
+            val url = findBuildUrl(it.results) ?: return@getBuilds
             build = TeamCityBuild.fromUrl(url) ?: return@getBuilds
         }
 
@@ -25,10 +29,17 @@ class CodeCoverageExtension(private val project: Project) {
         }
     }
 
+    private fun findBuildUrl(builds: Array<BuildResult>): Url? {
+        return builds
+                .filter { it.state == BuildResult.STATE_SUCCESSFUL }
+                .map { Url(it.url) }
+                .firstOrNull { it.host == project.teamCity.host }
+    }
+
     private fun onFileLoaded(file: String, path: String) {
         if (isFileMatches(file)) {
             val javaPackage = getJavaPackage(path)
-            val coverageUrl = build.getJacocoCoverageUrl(javaPackage, file)
+            val coverageUrl = build?.getJacocoCoverageUrl(javaPackage, file) ?: return
             loadCoverageReport(coverageUrl)
         }
     }
@@ -36,10 +47,23 @@ class CodeCoverageExtension(private val project: Project) {
     private fun loadCoverageReport(coverageUrl: String) {
         requests.get(coverageUrl, {
             val coverage = JacocoParser.parseHtmlReport(it)
-            page.addFileToolbarButton("Coverage", coverageUrl)
+            page.addCoverageButton(coverageUrl)
             page.showCoverage(coverage)
-            console.log(coverage)
+            showCoverageBar(coverage)
         })
+    }
+
+    private fun showCoverageBar(coverageReport: FileCoverage) {
+        val full = coverageReport.lines.values.count { it.coverage == FULL }
+        val partial = coverageReport.lines.values.count { it.coverage == PARTIAL }
+        val none = coverageReport.lines.values.count { it.coverage == NONE }
+        val sum = (full + partial + none).toFloat()
+
+        page.addCoverageBar(
+                full / sum,
+                partial / sum,
+                none / sum
+        )
     }
 
     private fun getJavaPackage(path: String): String {

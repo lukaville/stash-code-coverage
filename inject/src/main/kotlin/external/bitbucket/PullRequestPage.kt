@@ -42,10 +42,24 @@ class PullRequestPage {
         observer.observe(target as Node, observerOptions)
     }
 
-    fun addFileToolbarButton(title: String, url: String) {
+    fun addCoverageButton(url: String) {
         val toolbar = document.querySelector(".file-toolbar > .secondary") ?: return
-        val buttonString = """<div class="aui-buttons"><a href="$url" target="_blank" class="aui-button" autocomplete="off">$title</a></div>"""
+        val buttonString = """
+        <div class="aui-buttons">
+            <a href="$url" target="_blank" class="aui-button" autocomplete="off">Coverage</a>
+        </div>
+        """
         toolbar.insertAdjacentHTML("afterbegin", buttonString)
+    }
+
+    fun addCoverageBar(covered: Float, partiallyCovered: Float, notCovered: Float) {
+        val toolbar = document.querySelector(".file-toolbar > .secondary") ?: return
+
+        val bar = """
+            <div style="height: 3px; position: absolute; left: 0; bottom: 0; width: 100%; background: -webkit-linear-gradient(left, #4CAF50 0%, #4CAF50 ${covered * 100}%, #FFD600 ${covered * 100 + 0.01}%, #FFD600 ${(covered + partiallyCovered) * 100}%, #F44336 ${(covered + partiallyCovered) * 100 + 0.01}%, #F44336 100%);">&nbsp;</div>
+        """
+
+        toolbar.insertAdjacentHTML("afterend", bar)
     }
 
     fun showCoverage(fileCoverage: FileCoverage) {
