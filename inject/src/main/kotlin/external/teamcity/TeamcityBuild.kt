@@ -11,7 +11,7 @@ class TeamCityBuild(val scheme: String,
         return Url(scheme, host, getCoveragePath(javaPackage, file)).toString()
     }
 
-    fun getCoveragePath(javaPackage: String, file: String): String {
+    private fun getCoveragePath(javaPackage: String, file: String): String {
         return "repository/download/$buildTypeId/$buildId:id/.teamcity/coverage_jacoco/coverage.zip!/$javaPackage/$file.html"
     }
 
