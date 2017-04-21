@@ -10,7 +10,7 @@ object BitbucketServerApi {
     private val baseUrl = "${window.location.origin}/rest"
 
     fun getBuilds(pullRequest: PullRequest, callback: (BuildStatus) -> Unit) {
-        val url = "$baseUrl/build-status/latest/commits/stats/${pullRequest.fromRef.latestCommit}?includeUnique=true"
+        val url = "$baseUrl/build-status/latest/commits/${pullRequest.fromRef.latestCommit}"
         requests.getJson(url, callback)
     }
 

@@ -19,11 +19,8 @@ class CodeCoverageExtension(private val project: Project) {
         this.page = page
 
         BitbucketServerApi.getBuilds(page.pullRequest) {
-            val url = findBuildUrl(it.results) ?: return@getBuilds
-            val build = TeamCityBuild.fromUrl(url) ?: return@getBuilds
-            if (build.buildTypeId == project.teamCity.buildTypeId) {
-                this.build = build
-            }
+            val url = findCoverageReportBuildUrl(it.values) ?: return@getBuilds
+            this.build = TeamCityBuild.fromUrl(url) ?: return@getBuilds
         }
 
         page.addFileViewListener { file, path ->
@@ -31,11 +28,18 @@ class CodeCoverageExtension(private val project: Project) {
         }
     }
 
-    private fun findBuildUrl(builds: Array<BuildResult>): Url? {
-        return builds
-                .filter { it.state == BuildResult.STATE_SUCCESSFUL }
-                .map { Url(it.url) }
-                .firstOrNull { it.host == project.teamCity.host }
+    private fun findCoverageReportBuildUrl(builds: Array<BuildResult>): Url? {
+        val build = builds.firstOrNull {
+            it.key == project.teamCity.buildTypeId && it.state == BuildResult.STATE_SUCCESSFUL
+        } ?: return null
+
+        val url = Url(build.url)
+
+        if (url.host == project.teamCity.host) {
+            return url
+        } else {
+            return null
+        }
     }
 
     private fun onFileLoaded(file: String, path: String) {

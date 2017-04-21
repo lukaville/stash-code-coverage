@@ -3,7 +3,8 @@ package external.bitbucket.model
 class BuildResult(
         val dateAdded: Long,
         val url: String,
-        val state: String
+        val state: String,
+        val key: String
 ) {
     companion object {
         const val STATE_SUCCESSFUL = "SUCCESSFUL"
